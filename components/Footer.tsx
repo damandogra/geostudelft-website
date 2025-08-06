@@ -42,7 +42,7 @@ export default function Footer() {
               <iframe
                 width="100%"
                 height="100%"
-                src="https://www.openstreetmap.org/export/embed.html?bbox=4.3695,52.000,4.3720,52.015&layer=mapnik&marker=52.005677,4.3708454"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=4.3668454,52.003677,4.3748454,52.007677&layer=mapnik&marker=52.005677,4.3708454"
                 title="GEOS Location Map"
               />
             </div>
