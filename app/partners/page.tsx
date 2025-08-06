@@ -25,10 +25,7 @@ export default function PartnersPage() {
         <div className="prose dark:prose-invert mt-12 max-w-none">
           <h2>Become a Partner</h2>
           <p>Interested in partnering with us? We're always looking for new collaborations that align with our mission and values.</p>
-          <a 
-            href="mailto:geos@tudelft.nl"
-            className="bg-primary-500 hover:bg-primary-600 rounded-md px-4 py-2 text-white
-          >
+          <a href="mailto:geos@tudelft.nl" className="bg-primary-500 hover:bg-primary-600 inline-block rounded-md px-4 py-2 text-white no-underline transition-colors duration-200">
             Contact Us
           </a>
         </div>
