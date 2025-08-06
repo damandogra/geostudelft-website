@@ -27,7 +27,7 @@ export default function PartnersPage() {
           <p>Interested in partnering with us? We're always looking for new collaborations that align with our mission and values.</p>
           <a 
             href="mailto:geos@tudelft.nl"
-            className="inline-block bg-primary-500 hover:bg-primary-600 rounded-md px-4 py-2 text-white no-underline transition-colors duration-200"
+            className="bg-primary-500 hover:bg-primary-600 rounded-md px-4 py-2 text-white
           >
             Contact Us
           </a>
