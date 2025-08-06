@@ -4,6 +4,7 @@ import { Metadata } from 'next'
 import { allEvents, allCareers } from 'contentlayer/generated'
 import partnersData from '@/data/partnersData'
 import { compareDesc, parseISO, isAfter, format } from 'date-fns'
+import BannerCarousel from '@/components/BannerCarousel'
 
 export const metadata: Metadata = {
   title: 'GEOS - Geomatics Student Association',
@@ -11,43 +12,49 @@ export const metadata: Metadata = {
 }
 
 export default function HomePage() {
-  // Get future events only
+  // Get the 3 most recent events (past or future)
+  const recentEvents = allEvents.sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date))).slice(0, 3)
+
+  // Check if each event is in the future
   const now = new Date()
-  const futureEvents = allEvents
-    .filter((event) => isAfter(parseISO(event.date), now))
-    .sort((a, b) => compareDesc(parseISO(b.date), parseISO(a.date)))
-    .slice(0, 2)
+  const eventsWithStatus = recentEvents.map((event) => ({
+    ...event,
+    isFuture: isAfter(parseISO(event.date), now),
+  }))
+
   const latestCareers = allCareers.sort((a, b) => compareDesc(parseISO(a.applicationDeadline), parseISO(b.applicationDeadline))).slice(0, 2)
+
+  // Slides for the hero carousel
+  const slides = [
+    {
+      image: '/images/home/pointcloud.jpg',
+      title: 'Welcome to GEOS!',
+      subtitle: 'The Study Association of Geomatics Master Programme TU Delft',
+      description: 'We organize events, provide study materials, and create a community for students interested in geosciences and related fields.',
+      primary: { href: '/about', label: 'About Us' },
+      secondary: { href: '/gallery', label: 'View Gallery' },
+      imagePosition: 'bottom',
+    },
+    {
+      image: '/images/home/kickoff.jpg',
+      title: 'BK MSc Kick-off',
+      subtitle: 'The GEOS Board of 2025 wishes you a wonderful summer break! New Geomatics students: Mark your calendars for the BK MSc Kick-off Programme from Aug 25-29!',
+      imagePosition: 'center',
+      primary: { href: '/events/kick-off', label: 'About' },
+      secondary: { href: 'https://www.tudelft.nl/en/student/a-be-student-portal/education/master-of-science/a-good-start-of-your-master/msc-kick-off-programme', label: 'More Info' },
+    },
+  ]
 
   return (
     <>
-      {/* Hero Banner Section */}
-      <div className="relative overflow-hidden rounded-lg">
-        <div className="absolute inset-0">
-          <Image src="/images/home/pointcloud.jpg" alt="GEOS Banner" fill className="object-cover object-bottom" priority />
-          <div className="bg-opacity-40 absolute inset-0"></div>
-        </div>
-        <div className="relative container mx-auto px-4 py-24">
-          <div className="text-center text-white">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">GEOS</h1>
-            <p className="mx-auto mt-6 max-w-2xl text-xl">Geomatics Student Association</p>
-            <div className="mt-10 flex justify-center gap-4">
-              <Link href="/about" className="bg-primary-500 hover:bg-primary-600 rounded-md px-6 py-3 text-white transition-colors">
-                About Us
-              </Link>
-              <Link href="/gallery" className="rounded-md border border-white px-6 py-3 text-white transition-colors hover:bg-white hover:text-gray-900">
-                View Gallery
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Hero Banner Section => Carousel */}
+      <BannerCarousel slides={slides} className="h-[420px] sm:h-[520px] md:h-[400px]" />
 
       {/* Events Section */}
       <div className="py-16">
         <div className="container mx-auto px-4">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-            <div className="relative h-64 lg:h-80">
+            <div className="relative h-64 lg:h-120">
               <Image src="/images/home/events.jpg" alt="Events" fill className="rounded-lg object-cover" />
             </div>
             <div>
@@ -55,13 +62,18 @@ export default function HomePage() {
               <p className="mb-6 text-gray-600 dark:text-gray-400">
                 Take a look at past and future events organised by and for the Geomatics students. From lunch lectures to networking events, we provide opportunities for learning and connection.
               </p>
-              {futureEvents.length > 0 && (
+              {eventsWithStatus.length > 0 && (
                 <div className="mb-6 space-y-3">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Upcoming Events:</h3>
-                  {futureEvents.map((event) => (
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Events:</h3>
+                  {eventsWithStatus.map((event) => (
                     <div key={event.slug} className="border-primary-500 border-l-4 pl-4">
                       <Link href={`/events/${event.slug}`} className="hover:text-primary-600 block">
-                        <h4 className="font-medium text-gray-900 dark:text-gray-100">{event.title}</h4>
+                        <div className="flex items-start justify-between">
+                          <h4 className="font-medium text-gray-900 dark:text-gray-100">{event.title}</h4>
+                          {event.isFuture && (
+                            <span className="ml-2 inline-flex items-center rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-200">Upcoming</span>
+                          )}
+                        </div>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                           {format(parseISO(event.date), 'MMM dd, yyyy')} {event.time && `• ${event.time}`} • {event.location}
                         </p>
