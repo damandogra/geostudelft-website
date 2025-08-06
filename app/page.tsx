@@ -38,17 +38,18 @@ export default function HomePage() {
     {
       image: '/images/home/kickoff.jpg',
       title: 'BK MSc Kick-off',
-      subtitle: 'The GEOS Board of 2025 wishes you a wonderful summer break! New Geomatics students: Mark your calendars for the BK MSc Kick-off Programme from Aug 25-29!',
-      imagePosition: 'center' as const,
+      subtitle: 'The GEOS Board of 2025 wishes you a wonderful summer break! ',
+      description: 'New Geomatics students: Welcome to participate the BK MSc Kick-off Programme from Aug 25-29!',
       primary: { href: '/events/kick-off', label: 'About' },
       secondary: { href: 'https://www.tudelft.nl/en/student/a-be-student-portal/education/master-of-science/a-good-start-of-your-master/msc-kick-off-programme', label: 'More Info' },
+      imagePosition: 'center' as const,
     },
   ]
 
   return (
     <>
       {/* Hero Banner Section => Carousel */}
-      <BannerCarousel slides={slides} className="h-[420px] sm:h-[520px] md:h-[400px]" />
+      <BannerCarousel slides={slides} className="h-[420px] sm:h-[520px] md:h-[430px]" />
 
       {/* Events Section */}
       <div className="py-16">
