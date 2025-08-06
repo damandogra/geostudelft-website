@@ -1,4 +1,5 @@
-import { Metadata } from 'next'
+import { Metadata }
+ from 'next'
 import PartnerCard from '@/components/PartnerCard'
 import partnersData from '@/data/partnersData'
 
@@ -25,15 +26,15 @@ export default function PartnersPage() {
         <div className="prose dark:prose-invert mt-12 max-w-none">
           <h2>Become a Partner</h2>
           <p>Interested in partnering with us? We're always looking for new collaborations that align with our mission and values.</p>
-          <div className="flex gap-4 mt-4">
-            <button className="bg-primary-500 hover:bg-primary-600 rounded-md px-4 py-2 text-white">
+          <div className="mt-4 flex gap-4">
+            <button className="rounded-md bg-primary-500 px-4 py-2 text-white hover:bg-primary-600">
               Contact Us
             </button>
-            <a 
+            <a
               href="https://www.figma.com/deck/8B3lAoguLeBv7Z97mQDBEM/GEOS_sponsor_deck?node-id=46-161&viewport=-72%2C-34%2C0.49&t=cExM2ajh3ucjUBxA-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gray-500 hover:bg-gray-600 rounded-md px-4 py-2 text-white no-underline"
+              className="rounded-md bg-gray-500 px-4 py-2 text-white no-underline hover:bg-gray-600"
             >
               Learn More
             </a>
