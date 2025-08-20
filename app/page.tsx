@@ -27,6 +27,15 @@ export default function HomePage() {
   // Slides for the hero carousel
   const slides = [
     {
+      image: '/images/home/intergeo.jpg',
+      title: 'INTERGEO @Frankfurt',
+      subtitle: 'Sign Up for our trip to INTERGEO! This year it in Frankfurt, Germany, from October 7th to 9th.',
+      description: 'INTERGEO is an annual world-leading event for geodesy, geo-information, and land management.',
+      primary: { href: '/events/intergeo25', label: 'About' },
+      secondary: { href: 'https://docs.google.com/forms/d/e/1FAIpQLSflbg46uDc5YDGVB7J7Y69_bxSrm2bWkJ1iyC0QaAgjabP83A/viewform', label: 'Sign Up' },
+      imagePosition: 'center' as const,
+    },
+    {
       image: '/images/home/pointcloud.jpg',
       title: 'Welcome to GEOS!',
       subtitle: 'The Study Association of Geomatics Master Programme TU Delft',
