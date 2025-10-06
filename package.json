@@ -2,7 +2,7 @@
   "name": "geostudelft.nl",
   "version": "1.0.1",
   "private": true,
-  "engines": { "node": "18.x" },
+  "engines": { "node": "22.x" },
   "scripts": {
     "start": "next dev",
     "dev": "cross-env INIT_CWD=$PWD next dev",
