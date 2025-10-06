@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Metadata } from 'next'
 import { allEvents, allCareers } from 'contentlayer/generated'
 import partnersData from '@/data/partnersData'
-import { compareDesc, parseISO, isAfter, format } from 'date-fns'
+import { compareDesc, parseISO, isAfter, format, setHours, setMinutes } from 'date-fns'
 import BannerCarousel from '@/components/BannerCarousel'
 
 export const metadata: Metadata = {
