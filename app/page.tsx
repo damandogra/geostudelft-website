@@ -15,12 +15,50 @@ export default function HomePage() {
   // Get the 3 most recent events (past or future)
   const recentEvents = allEvents.sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date))).slice(0, 3)
 
-  // Check if each event is in the future
+  // Check if each event is in the future with proper logic
   const now = new Date()
-  const eventsWithStatus = recentEvents.map((event) => ({
-    ...event,
-    isFuture: isAfter(parseISO(event.date), now),
-  }))
+  const eventsWithStatus = recentEvents.map((event) => {
+    let comparisonDate: Date
+
+    // 对于多天活动，使用结束日期
+    if (event.eventType === 'multi-day' && event.endDate) {
+      comparisonDate = parseISO(event.endDate)
+    } else {
+      // 对于单天活动，使用开始日期
+      comparisonDate = parseISO(event.date)
+    }
+
+    // 如果有具体时间，解析时间以获得更准确的比较
+    if (event.time && event.time.includes(':')) {
+      try {
+        // 处理时间格式，例如 "1:45 PM – 6:00 PM"
+        const timeStr = event.time.split('–')[0].trim() // 取开始时间
+        const timeParts = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i)
+        
+        if (timeParts) {
+          let hours = parseInt(timeParts[1])
+          const minutes = parseInt(timeParts[2])
+          const isPM = timeParts[3] && timeParts[3].toUpperCase() === 'PM'
+          
+          // 转换为24小时制
+          if (isPM && hours !== 12) {
+            hours += 12
+          } else if (!isPM && hours === 12) {
+            hours = 0
+          }
+          
+          comparisonDate = setMinutes(setHours(comparisonDate, hours), minutes)
+        }
+      } catch (error) {
+        console.warn('Failed to parse event time:', event.time)
+      }
+    }
+
+    return {
+      ...event,
+      isFuture: isAfter(comparisonDate, now),
+    }
+  })
 
   const latestCareers = allCareers.sort((a, b) => compareDesc(parseISO(a.applicationDeadline), parseISO(b.applicationDeadline))).slice(0, 2)
 
@@ -36,6 +74,15 @@ export default function HomePage() {
       imagePosition: 'center' as const,
     },
     {
+      image: '/images/events/geoday_24.jpeg',
+      title: 'Geometics Day',
+      subtitle: 'Mark your calendars for the annual Geomatics Day at TU Delft! ',
+      description: 'Press "Sign Up" to register',
+      primary: { href: '/events/geoday_25', label: 'About' },
+      secondary: { href: 'https://tudelft3d.typeform.com/to/EvpqL6e7', label: 'Sign Up' },
+      imagePosition: 'center' as const,
+    },
+    {
       image: '/images/home/pointcloud.jpg',
       title: 'Welcome to GEOS!',
       subtitle: 'The Study Association of Geomatics Master Programme TU Delft',
@@ -43,15 +90,6 @@ export default function HomePage() {
       primary: { href: '/about', label: 'About Us' },
       secondary: { href: '/gallery', label: 'View Gallery' },
       imagePosition: 'bottom' as const,
-    },
-    {
-      image: '/images/home/kickoff.jpg',
-      title: 'BK MSc Kick-off',
-      subtitle: 'The GEOS Board of 2025 wishes you a wonderful summer break! ',
-      description: 'New Geomatics students: Welcome to participate the BK MSc Kick-off Programme from Aug 25-29!',
-      primary: { href: '/events/kick-off', label: 'About' },
-      secondary: { href: 'https://www.tudelft.nl/en/student/a-be-student-portal/education/master-of-science/a-good-start-of-your-master/msc-kick-off-programme', label: 'More Info' },
-      imagePosition: 'center' as const,
     },
   ]
 
