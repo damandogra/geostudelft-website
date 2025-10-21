@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Metadata } from 'next'
 import { allEvents, allCareers } from 'contentlayer/generated'
 import partnersData from '@/data/partnersData'
-import { compareDesc, parseISO, isAfter, format } from 'date-fns'
+import { compareDesc, parseISO, isAfter, format, setHours, setMinutes } from 'date-fns'
 import BannerCarousel from '@/components/BannerCarousel'
 
 export const metadata: Metadata = {
@@ -15,24 +15,62 @@ export default function HomePage() {
   // Get the 3 most recent events (past or future)
   const recentEvents = allEvents.sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date))).slice(0, 3)
 
-  // Check if each event is in the future
+  // Check if each event is in the future with proper logic
   const now = new Date()
-  const eventsWithStatus = recentEvents.map((event) => ({
-    ...event,
-    isFuture: isAfter(parseISO(event.date), now),
-  }))
+  const eventsWithStatus = recentEvents.map((event) => {
+    let comparisonDate: Date
+
+    // 对于多天活动，使用结束日期
+    if (event.eventType === 'multi-day' && event.endDate) {
+      comparisonDate = parseISO(event.endDate)
+    } else {
+      // 对于单天活动，使用开始日期
+      comparisonDate = parseISO(event.date)
+    }
+
+    // 如果有具体时间，解析时间以获得更准确的比较
+    if (event.time && event.time.includes(':')) {
+      try {
+        // 处理时间格式，例如 "1:45 PM – 6:00 PM"
+        const timeStr = event.time.split('–')[0].trim() // 取开始时间
+        const timeParts = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i)
+
+        if (timeParts) {
+          let hours = parseInt(timeParts[1])
+          const minutes = parseInt(timeParts[2])
+          const isPM = timeParts[3] && timeParts[3].toUpperCase() === 'PM'
+
+          // 转换为24小时制
+          if (isPM && hours !== 12) {
+            hours += 12
+          } else if (!isPM && hours === 12) {
+            hours = 0
+          }
+
+          comparisonDate = setMinutes(setHours(comparisonDate, hours), minutes)
+        }
+      } catch (error) {
+        console.warn('Failed to parse event time:', event.time)
+      }
+    }
+
+    return {
+      ...event,
+      isFuture: isAfter(comparisonDate, now),
+    }
+  })
 
   const latestCareers = allCareers.sort((a, b) => compareDesc(parseISO(a.applicationDeadline), parseISO(b.applicationDeadline))).slice(0, 2)
 
   // Slides for the hero carousel
   const slides = [
     {
-      image: '/images/home/intergeo.jpg',
-      title: 'INTERGEO @Frankfurt',
-      subtitle: 'Sign Up for our trip to INTERGEO! This year it in Frankfurt, Germany, from October 7th to 9th.',
-      description: 'INTERGEO is an annual world-leading event for geodesy, geo-information, and land management.',
-      primary: { href: '/events/intergeo25', label: 'About' },
-      secondary: { href: 'https://docs.google.com/forms/d/e/1FAIpQLSflbg46uDc5YDGVB7J7Y69_bxSrm2bWkJ1iyC0QaAgjabP83A/viewform', label: 'Sign Up' },
+      image: '/images/events/geoday_24.jpeg',
+      title: 'Geometics Day',
+      subtitle: 'Mark your calendars for the annual Geomatics Day at TU Delft! ',
+      description: 'Press "Sign Up" to register',
+      primary: { href: '/events/geoday_25', label: 'About' },
+      secondary: { href: 'https://tudelft3d.typeform.com/to/EvpqL6e7', label: 'Sign Up' },
       imagePosition: 'center' as const,
     },
     {
@@ -45,12 +83,12 @@ export default function HomePage() {
       imagePosition: 'bottom' as const,
     },
     {
-      image: '/images/home/kickoff.jpg',
-      title: 'BK MSc Kick-off',
-      subtitle: 'The GEOS Board of 2025 wishes you a wonderful summer break! ',
-      description: 'New Geomatics students: Welcome to participate the BK MSc Kick-off Programme from Aug 25-29!',
-      primary: { href: '/events/kick-off', label: 'About' },
-      secondary: { href: 'https://www.tudelft.nl/en/student/a-be-student-portal/education/master-of-science/a-good-start-of-your-master/msc-kick-off-programme', label: 'More Info' },
+      image: '/images/gallery/2025-26/intergeo2025.jpg',
+      title: 'INTERGEO @Frankfurt',
+      subtitle: 'Check out Our INTERGEO Trip!',
+      description: 'This year, GEOS took 40 Geomatics students to Frankfurt for the annual INTERGEO trip',
+      primary: { href: 'https://www.instagram.com/p/DPs_Q9hDJ00/?img_index=1', label: 'Photo' },
+      secondary: { href: '/gallery', label: 'View Gallery' },
       imagePosition: 'center' as const,
     },
   ]
