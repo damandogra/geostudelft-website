@@ -65,21 +65,21 @@ export default function HomePage() {
   // Slides for the hero carousel
   const slides = [
     {
-      image: '/images/home/intergeo.jpg',
-      title: 'INTERGEO @Frankfurt',
-      subtitle: 'Sign Up for our trip to INTERGEO! This year it in Frankfurt, Germany, from October 7th to 9th.',
-      description: 'INTERGEO is an annual world-leading event for geodesy, geo-information, and land management.',
-      primary: { href: '/events/intergeo25', label: 'About' },
-      secondary: { href: 'https://docs.google.com/forms/d/e/1FAIpQLSflbg46uDc5YDGVB7J7Y69_bxSrm2bWkJ1iyC0QaAgjabP83A/viewform', label: 'Sign Up' },
-      imagePosition: 'center' as const,
-    },
-    {
       image: '/images/events/geoday_24.jpeg',
       title: 'Geometics Day',
       subtitle: 'Mark your calendars for the annual Geomatics Day at TU Delft! ',
       description: 'Press "Sign Up" to register',
       primary: { href: '/events/geoday_25', label: 'About' },
       secondary: { href: 'https://tudelft3d.typeform.com/to/EvpqL6e7', label: 'Sign Up' },
+      imagePosition: 'center' as const,
+    },
+    {
+      image: '/images/gallery/2025-26/intergeo2025.jpg',
+      title: 'INTERGEO @Frankfurt',
+      subtitle: 'Check out our trip to INTERGEO!',
+      description: 'This year, GEOS took 40 Geomatics students to  Frankfurt for the annual INTERGEO trip 🇩🇪',
+      primary: { href: 'https://www.instagram.com/p/DPs_Q9hDJ00/', label: 'Photos' },
+      secondary: { href: '/gallery', label: 'View Gallery' },
       imagePosition: 'center' as const,
     },
     {
