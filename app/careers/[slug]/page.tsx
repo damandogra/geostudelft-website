@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export const dynamic = 'force-static'
 export const revalidate = 60
@@ -13,40 +14,46 @@ export async function generateStaticParams() {
   }))
 }
 
-export async function generateMetadata({ params }) {
-  const career = allCareers.find((career) => career.slug === params.slug)
-  if (!career) {
-    return {}
-  }
-
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const career = allCareers.find((c) => c.slug === params.slug)
+  if (!career) return {}
   return {
     title: career.title,
     description: career.description,
   }
 }
 
-export default function CareerPage({ params }) {
-  const career = allCareers.find((career) => career.slug === params.slug)
+export default function CareerPage({ params }: { params: { slug: string } }) {
+  const career = allCareers.find((c) => c.slug === params.slug)
+  if (!career) notFound()
 
-  if (!career) {
-    notFound()
-  }
+  const deadline =
+    career.applicationDeadline ? new Date(career.applicationDeadline).toLocaleDateString() : null
 
   return (
     <div className="divide-y divide-gray-200 dark:divide-gray-700">
       <div className="space-y-2 pt-6 pb-8 md:space-y-5">
         <div className="flex items-center space-x-4">
           <div className="relative h-24 w-24 overflow-hidden rounded-lg">
-            <Image src={career.companyLogo} alt={career.company} fill className="object-contain" sizes="96px" />
+            <Image
+              src={career.companyLogo}
+              alt={`${career.company} logo`}
+              fill
+              className="object-contain"
+              sizes="96px"
+            />
           </div>
           <div>
-            <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">{career.title}</h1>
+            <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">
+              {career.title}
+            </h1>
             <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
               {career.company} • {career.location}
             </p>
           </div>
         </div>
       </div>
+
       <div className="container py-12">
         <div className="prose dark:prose-invert max-w-none">
           <div className="mb-8">
@@ -54,12 +61,36 @@ export default function CareerPage({ params }) {
             <p>{career.description}</p>
           </div>
 
-          <div className="mb-8">
-            <h2>How to Apply</h2>
-            <p>Please submit your application before {new Date(career.applicationDeadline).toLocaleDateString()}</p>
-            <a href={career.applicationLink} target="_blank" rel="noopener noreferrer" className="bg-primary-500 hover:bg-primary-600 inline-block rounded-md px-4 py-2 text-white">
-              Apply Now
-            </a>
+          {/* 将 CTA 与 prose 隔离，避免排版样式影响按钮文字可见性 */}
+          <div className="mb-8 not-prose">
+            <h2 className="mb-2 text-2xl font-bold">How to Apply</h2>
+            {deadline && (
+              <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+                Please submit your application before {deadline}
+              </p>
+            )}
+            {career.applicationLink && (
+              <Link
+              href={career.applicationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Apply now on company website"
+              className="
+                inline-flex items-center gap-2 rounded-lg px-4 py-2 font-semibold
+                bg-white text-gray-900
+                border border-gray-300 shadow-sm
+                hover:bg-gray-50
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2
+                dark:bg-white dark:text-gray-900 dark:border-gray-300 dark:hover:bg-gray-100 dark:focus-visible:ring-primary-400
+                transition-colors
+              "
+            >
+              Apply now
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 opacity-90">
+                <path d="M13 5h6v6h-2V8.41l-8.29 8.3-1.42-1.42L15.59 7H13V5z"></path>
+              </svg>
+            </Link>            
+            )}
           </div>
 
           <MDXLayoutRenderer code={career.body.code} />

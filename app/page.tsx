@@ -34,19 +34,19 @@ export default function HomePage() {
         // 处理时间格式，例如 "1:45 PM – 6:00 PM"
         const timeStr = event.time.split('–')[0].trim() // 取开始时间
         const timeParts = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i)
-
+        
         if (timeParts) {
           let hours = parseInt(timeParts[1])
           const minutes = parseInt(timeParts[2])
           const isPM = timeParts[3] && timeParts[3].toUpperCase() === 'PM'
-
+          
           // 转换为24小时制
           if (isPM && hours !== 12) {
             hours += 12
           } else if (!isPM && hours === 12) {
             hours = 0
           }
-
+          
           comparisonDate = setMinutes(setHours(comparisonDate, hours), minutes)
         }
       } catch (error) {
@@ -65,6 +65,15 @@ export default function HomePage() {
   // Slides for the hero carousel
   const slides = [
     {
+      image: '/images/home/intergeo.jpg',
+      title: 'INTERGEO @Frankfurt',
+      subtitle: 'Sign Up for our trip to INTERGEO! This year it in Frankfurt, Germany, from October 7th to 9th.',
+      description: 'INTERGEO is an annual world-leading event for geodesy, geo-information, and land management.',
+      primary: { href: '/events/intergeo25', label: 'About' },
+      secondary: { href: 'https://docs.google.com/forms/d/e/1FAIpQLSflbg46uDc5YDGVB7J7Y69_bxSrm2bWkJ1iyC0QaAgjabP83A/viewform', label: 'Sign Up' },
+      imagePosition: 'center' as const,
+    },
+    {
       image: '/images/events/geoday_24.jpeg',
       title: 'Geometics Day',
       subtitle: 'Mark your calendars for the annual Geomatics Day at TU Delft! ',
@@ -81,15 +90,6 @@ export default function HomePage() {
       primary: { href: '/about', label: 'About Us' },
       secondary: { href: '/gallery', label: 'View Gallery' },
       imagePosition: 'bottom' as const,
-    },
-    {
-      image: '/images/gallery/2025-26/intergeo2025.jpg',
-      title: 'INTERGEO @Frankfurt',
-      subtitle: 'Check out Our INTERGEO Trip!',
-      description: 'This year, GEOS took 40 Geomatics students to Frankfurt for the annual INTERGEO trip',
-      primary: { href: 'https://www.instagram.com/p/DPs_Q9hDJ00/?img_index=1', label: 'Photo' },
-      secondary: { href: '/gallery', label: 'View Gallery' },
-      imagePosition: 'center' as const,
     },
   ]
 
