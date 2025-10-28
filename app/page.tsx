@@ -66,7 +66,7 @@ export default function HomePage() {
   const slides = [
     {
       image: '/images/events/geoday_24.jpeg',
-      title: 'Geometics Day',
+      title: 'Geomatics Day',
       subtitle: 'Mark your calendars for the annual Geomatics Day at TU Delft! ',
       description: 'Press "Sign Up" to register',
       primary: { href: '/events/geoday_25', label: 'About' },
