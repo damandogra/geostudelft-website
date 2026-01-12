@@ -65,6 +65,15 @@ export default function HomePage() {
   // Slides for the hero carousel
   const slides = [
     {
+      image: '/images/home/pointcloud.jpg',
+      title: 'Welcome to GEOS!',
+      subtitle: 'The Study Association of Geomatics Master Programme TU Delft',
+      description: 'We organize events, provide study materials, and create a community for students interested in geosciences and related fields.',
+      primary: { href: '/about', label: 'About Us' },
+      secondary: { href: '/gallery', label: 'View Gallery' },
+      imagePosition: 'bottom' as const,
+    },
+    {
       image: '/images/events/geoday_24.jpeg',
       title: 'Geomatics Day',
       subtitle: 'Mark your calendars for the annual Geomatics Day at TU Delft! ',
@@ -81,15 +90,6 @@ export default function HomePage() {
       primary: { href: 'https://www.instagram.com/p/DPs_Q9hDJ00/', label: 'Photos' },
       secondary: { href: '/gallery', label: 'View Gallery' },
       imagePosition: 'center' as const,
-    },
-    {
-      image: '/images/home/pointcloud.jpg',
-      title: 'Welcome to GEOS!',
-      subtitle: 'The Study Association of Geomatics Master Programme TU Delft',
-      description: 'We organize events, provide study materials, and create a community for students interested in geosciences and related fields.',
-      primary: { href: '/about', label: 'About Us' },
-      secondary: { href: '/gallery', label: 'View Gallery' },
-      imagePosition: 'bottom' as const,
     },
   ]
 
