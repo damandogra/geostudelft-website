@@ -13,6 +13,20 @@ interface BoardYear {
 
 const boardMembers: BoardYear[] = [
   {
+    year: '2026 - 2027',
+    installationDate: 'June 1, 2026',
+    groupPhotoName: 'board_2627.jpg',
+    members: [
+      { name: 'Arda Baysal', role: 'Chairman', imageName: 'Arda.jpg' },
+      { name: 'Daman Dogra', role: 'Secretary', imageName: 'Daman.jpg' },
+      { name: 'Julia Fossa Marques', role: 'Events Manager', imageName: 'Julia.jpg' },
+      { name: 'Belina Aileen Santoso', role: 'External Affairs', imageName: 'Belina.jpg' },
+      { name: 'Niranjan Pradeep', role: 'Internal Affairs', imageName: 'Niranjan.jpg' },
+      { name: 'Henryk Gujda', role: 'Communications', imageName: 'Henryk.jpg' },
+      { name: 'Wieger van Teeffelen', role: 'Treasurer', imageName: 'Wieger.jpg' },
+    ],
+  },
+  {
     year: '2025 - 2026',
     installationDate: 'April 29, 2025',
     groupPhotoName: 'board_2526.jpg',
