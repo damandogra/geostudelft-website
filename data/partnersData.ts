@@ -16,13 +16,13 @@ const partnersData: Partner[] = [
     name: 'Readar',
     logo: '/images/partners/Readar.webp',
     website: 'https://readar.com',
-    description: 'Geotechnical engineering solutions',
+    description: 'Geomatics and geosciences solutions',
   },
   {
     name: 'GeoDelta',
     logo: '/images/partners/geodelta.webp',
     website: 'https://geodelta.nl',
-    description: 'Geotechnical consulting services',
+    description: 'Geomatics and geosciences consulting services',
   },
   {
     name: 'Enginear',

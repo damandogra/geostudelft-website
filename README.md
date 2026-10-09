@@ -74,7 +74,7 @@ Career postings follow a similar structure to events but with job-specific metad
 
 ```mdx
 ---
-title: 'Geotechnical Engineer'
+title: 'Geomatics Engineer'
 company: 'Fugro'
 companyLogo: '/images/careers/fugro-logo.webp'
 location: 'Delft, Netherlands'
@@ -97,6 +97,8 @@ applicationLink: 'https://www.fugro.com/careers'
 ```
 
 **Required fields:** `title`, `company`, `companyLogo`, `location`, `description`, `applicationDeadline`, `applicationLink`
+
+Postings disappear from `/careers` and the homepage after their `applicationDeadline` day (Amsterdam time). Their pages stay online with a "This vacancy has closed" notice. When nothing is open, both pages show "No open vacancies right now".
 
 ### Gallery
 

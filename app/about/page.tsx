@@ -4,7 +4,7 @@ import boardMembers from '@/data/boardMembers'
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn more about our organization and mission',
+  description: 'GEOS organizes events, provides study materials, and creates a community for students interested in geomatics and geosciences.',
 }
 
 export default function AboutPage() {
@@ -14,7 +14,7 @@ export default function AboutPage() {
         <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">About Us</h1>
         <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
           {/* Learn more about our organization, our mission, and the team behind our work. */}
-          We organize events, provide study materials, and create a community for students interested in geosciences and related fields.
+          We organize events, provide study materials, and create a community for students interested in geomatics and geosciences.
         </p>
       </div>
       <div className="container py-12">

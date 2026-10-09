@@ -6,13 +6,14 @@ import partnersData from '@/data/partnersData'
 import { compareDesc, parseISO, format } from 'date-fns'
 import BannerCarousel from '@/components/BannerCarousel'
 import { isEventPast } from '@/lib/events'
+import { isCareerOpen } from '@/lib/careers'
 
 export const metadata: Metadata = {
   title: 'GEOS - Geomatics Student Association',
   description: 'GEOS is the study association of the Geomatics masters programme at Delft University of Technology',
 }
 
-// Re-render hourly so "Upcoming" badges drop off without a redeploy
+// Re-render hourly so "Upcoming" badges and closed vacancies drop off without a redeploy
 export const revalidate = 3600
 
 export default function HomePage() {
@@ -25,7 +26,10 @@ export default function HomePage() {
     isFuture: !isEventPast(event, now),
   }))
 
-  const latestCareers = allCareers.sort((a, b) => compareDesc(parseISO(a.applicationDeadline), parseISO(b.applicationDeadline))).slice(0, 2)
+  const latestCareers = allCareers
+    .filter((career) => isCareerOpen(career, now))
+    .sort((a, b) => compareDesc(parseISO(a.applicationDeadline), parseISO(b.applicationDeadline)))
+    .slice(0, 2)
 
   // Slides for the hero carousel
   const slides = [
@@ -33,27 +37,18 @@ export default function HomePage() {
       image: '/images/home/pointcloud.webp',
       title: 'Welcome to GEOS!',
       subtitle: 'The Study Association of Geomatics Master Programme TU Delft',
-      description: 'We organize events, provide study materials, and create a community for students interested in geosciences and related fields.',
+      description: 'We organize events, provide study materials, and create a community for students interested in geomatics and geosciences.',
       primary: { href: '/about', label: 'About Us' },
       secondary: { href: '/gallery', label: 'View Gallery' },
       imagePosition: 'bottom' as const,
     },
     {
-      image: '/images/events/geoday_24.webp',
-      title: 'Geomatics Day',
-      subtitle: 'Mark your calendars for the annual Geomatics Day at TU Delft! ',
-      description: 'Press "Sign Up" to register',
-      primary: { href: '/events/geoday_25', label: 'About' },
-      secondary: { href: 'https://tudelft3d.typeform.com/to/EvpqL6e7', label: 'Sign Up' },
-      imagePosition: 'center' as const,
-    },
-    {
-      image: '/images/gallery/2025-26/intergeo2025.webp',
-      title: 'INTERGEO @Frankfurt',
-      subtitle: 'Check out our trip to INTERGEO!',
-      description: 'This year, GEOS took 40 Geomatics students to  Frankfurt for the annual INTERGEO trip 🇩🇪',
-      primary: { href: 'https://www.instagram.com/p/DPs_Q9hDJ00/', label: 'Photos' },
-      secondary: { href: '/gallery', label: 'View Gallery' },
+      image: '/images/events/lunch-lecture-ravon_26.webp',
+      title: 'Lunch Lecture: Adrien Ravon',
+      subtitle: 'Wed 14 Oct 2026 · Free for Geomatics students, lunch included',
+      description: 'Architect and academic Adrien Ravon shares 15 years of work bridging academia, the public and design action.',
+      primary: { href: '/events/lunch-lecture-adrien-ravon', label: 'About' },
+      secondary: { href: 'https://forms.gle/QAfmrF5annpqBjJH8', label: 'Sign Up' },
       imagePosition: 'center' as const,
     },
   ]
@@ -113,6 +108,7 @@ export default function HomePage() {
                 Find Geomatics related internships and graduate job offers. GEOS provides a platform for companies and research institutes to post their opportunities and connect with talented
                 students.
               </p>
+              {latestCareers.length === 0 && <p className="mb-6 font-medium text-gray-900 dark:text-gray-100">No open vacancies right now. Check back soon!</p>}
               {latestCareers.length > 0 && (
                 <div className="mb-6 space-y-3">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Opportunities:</h3>

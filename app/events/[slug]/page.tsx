@@ -3,6 +3,17 @@ import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { format, parseISO } from 'date-fns'
+import { Metadata } from 'next'
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const event = allEvents.find((e) => e.slug === slug)
+  if (!event) return {}
+  return {
+    title: event.title,
+    description: event.excerpt,
+  }
+}
 
 export default async function EventPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params

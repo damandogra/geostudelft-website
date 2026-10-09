@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import Image from 'next/image'
 import Link from 'next/link'
+import { isCareerOpen } from '@/lib/careers'
 
 export const dynamic = 'force-static'
 export const revalidate = 60
@@ -30,6 +31,7 @@ export default async function CareerPage({ params }: { params: Promise<{ slug: s
   if (!career) notFound()
 
   const deadline = career.applicationDeadline ? new Date(career.applicationDeadline).toLocaleDateString() : null
+  const isOpen = isCareerOpen(career)
 
   return (
     <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -57,8 +59,17 @@ export default async function CareerPage({ params }: { params: Promise<{ slug: s
           {/* 将 CTA 与 prose 隔离，避免排版样式影响按钮文字可见性 */}
           <div className="not-prose mb-8">
             <h2 className="mb-2 text-2xl font-bold">How to Apply</h2>
-            {deadline && <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Please submit your application before {deadline}</p>}
-            {career.applicationLink && (
+            {!isOpen && (
+              <p className="mb-3 text-gray-600 dark:text-gray-400">
+                This vacancy has closed. See{' '}
+                <Link href="/careers" className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
+                  current opportunities
+                </Link>
+                .
+              </p>
+            )}
+            {isOpen && deadline && <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Please submit your application before {deadline}</p>}
+            {isOpen && career.applicationLink && (
               <Link
                 href={career.applicationLink}
                 target="_blank"
