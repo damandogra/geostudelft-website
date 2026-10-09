@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from '@/components/Link'
 import Image from 'next/image'
-import { parseISO, isBefore, setHours, setMinutes, format } from 'date-fns'
+import { parseISO, format } from 'date-fns'
 
 interface EventCardProps {
   event: {
@@ -17,73 +17,12 @@ interface EventCardProps {
     excerpt?: string
     image?: string
   }
+  // Computed on the server (see lib/events.ts) so the card renders fully in the static HTML
+  isPast: boolean
 }
 
-export default function EventCard({ event }: EventCardProps) {
-  const [isPast, setIsPast] = useState(false)
-  const [isClient, setIsClient] = useState(false)
+export default function EventCard({ event, isPast }: EventCardProps) {
   const [imageError, setImageError] = useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-
-    const now = new Date()
-
-    // Determine which date to use for comparison
-    let comparisonDate: Date
-
-    if (event.eventType === 'multi-day' && event.endDate) {
-      // For multi-day events, use end date
-      comparisonDate = parseISO(event.endDate)
-    } else {
-      // For single day events, use start date
-      comparisonDate = parseISO(event.date)
-    }
-
-    // If event has specific time, parse it for more accurate comparison
-    if (event.time && event.time.includes(':') && (event.time.includes('AM') || event.time.includes('PM'))) {
-      try {
-        const [hours, minutes] = event.time.split('–')[0].trim().split(':')
-        const isPM = event.time.includes('PM')
-        const parsedHours = parseInt(hours) + (isPM && hours !== '12' ? 12 : 0)
-        const parsedMinutes = parseInt(minutes?.replace(' PM', '').replace(' AM', '') || '0')
-
-        comparisonDate = setMinutes(setHours(comparisonDate, parsedHours), parsedMinutes)
-      } catch (error) {
-        // Fallback to date-only comparison if time parsing fails
-        console.warn('Failed to parse event time:', event.time)
-      }
-    }
-
-    setIsPast(isBefore(comparisonDate, now))
-  }, [event.date, event.endDate, event.time, event.eventType])
-
-  // Show skeleton state during SSR to prevent hydration mismatch
-  if (!isClient) {
-    return (
-      <div className="relative flex animate-pulse flex-col rounded-lg border border-gray-200 p-6 md:flex-row dark:border-gray-700">
-        {event.image && <div className="relative mb-4 h-48 w-full flex-shrink-0 rounded bg-gray-300 md:mr-6 md:mb-0 md:w-64 dark:bg-gray-600"></div>}
-        <div className="flex flex-1 flex-col justify-between">
-          <div>
-            <div className="mb-2 flex items-center">
-              <div className="h-6 w-3/4 rounded bg-gray-300 dark:bg-gray-600"></div>
-              <div className="ml-2 h-5 w-16 rounded bg-gray-200 dark:bg-gray-700"></div>
-            </div>
-            <div className="mb-2 h-4 w-1/2 rounded bg-gray-200 dark:bg-gray-700"></div>
-            {event.excerpt && (
-              <div className="mb-4 space-y-2">
-                <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700"></div>
-                <div className="h-4 w-5/6 rounded bg-gray-200 dark:bg-gray-700"></div>
-              </div>
-            )}
-          </div>
-          <div>
-            <div className="h-10 w-32 rounded bg-gray-300 dark:bg-gray-600"></div>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="relative flex flex-col rounded-lg border border-gray-200 p-6 md:flex-row dark:border-gray-700">

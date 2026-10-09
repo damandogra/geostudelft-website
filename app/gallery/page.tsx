@@ -1,11 +1,9 @@
 import { allGalleries } from 'contentlayer/generated'
 import { compareDesc, parseISO, format } from 'date-fns'
 import Image from 'next/image'
-import { useMDXComponent } from 'pliny/mdx-components'
+import { MDXLayoutRenderer } from 'pliny/mdx-components'
 
 function GalleryItem({ gallery }) {
-  const MDXContent = useMDXComponent(gallery.body.code)
-
   return (
     <a href={gallery.link} target="_blank" rel="noopener noreferrer" className="group block">
       <article className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg transition-all group-hover:shadow-xl dark:border-gray-700 dark:bg-gray-800">
@@ -22,7 +20,7 @@ function GalleryItem({ gallery }) {
             </div>
             <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">{format(parseISO(gallery.date), 'MMM dd, yyyy')}</p>
             <div className="text-sm text-gray-700 dark:text-gray-300">
-              <MDXContent />
+              <MDXLayoutRenderer code={gallery.body.code} />
             </div>
           </div>
         </div>

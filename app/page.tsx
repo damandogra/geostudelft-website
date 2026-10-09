@@ -3,62 +3,27 @@ import Image from 'next/image'
 import { Metadata } from 'next'
 import { allEvents, allCareers } from 'contentlayer/generated'
 import partnersData from '@/data/partnersData'
-import { compareDesc, parseISO, isAfter, format, setHours, setMinutes } from 'date-fns'
+import { compareDesc, parseISO, format } from 'date-fns'
 import BannerCarousel from '@/components/BannerCarousel'
+import { isEventPast } from '@/lib/events'
 
 export const metadata: Metadata = {
   title: 'GEOS - Geomatics Student Association',
   description: 'GEOS is the study association of the Geomatics masters programme at Delft University of Technology',
 }
 
+// Re-render hourly so "Upcoming" badges drop off without a redeploy
+export const revalidate = 3600
+
 export default function HomePage() {
   // Get the 3 most recent events (past or future)
   const recentEvents = allEvents.sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date))).slice(0, 3)
 
-  // Check if each event is in the future with proper logic
   const now = new Date()
-  const eventsWithStatus = recentEvents.map((event) => {
-    let comparisonDate: Date
-
-    // 对于多天活动，使用结束日期
-    if (event.eventType === 'multi-day' && event.endDate) {
-      comparisonDate = parseISO(event.endDate)
-    } else {
-      // 对于单天活动，使用开始日期
-      comparisonDate = parseISO(event.date)
-    }
-
-    // 如果有具体时间，解析时间以获得更准确的比较
-    if (event.time && event.time.includes(':')) {
-      try {
-        // 处理时间格式，例如 "1:45 PM – 6:00 PM"
-        const timeStr = event.time.split('–')[0].trim() // 取开始时间
-        const timeParts = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i)
-        
-        if (timeParts) {
-          let hours = parseInt(timeParts[1])
-          const minutes = parseInt(timeParts[2])
-          const isPM = timeParts[3] && timeParts[3].toUpperCase() === 'PM'
-          
-          // 转换为24小时制
-          if (isPM && hours !== 12) {
-            hours += 12
-          } else if (!isPM && hours === 12) {
-            hours = 0
-          }
-          
-          comparisonDate = setMinutes(setHours(comparisonDate, hours), minutes)
-        }
-      } catch (error) {
-        console.warn('Failed to parse event time:', event.time)
-      }
-    }
-
-    return {
-      ...event,
-      isFuture: isAfter(comparisonDate, now),
-    }
-  })
+  const eventsWithStatus = recentEvents.map((event) => ({
+    ...event,
+    isFuture: !isEventPast(event, now),
+  }))
 
   const latestCareers = allCareers.sort((a, b) => compareDesc(parseISO(a.applicationDeadline), parseISO(b.applicationDeadline))).slice(0, 2)
 

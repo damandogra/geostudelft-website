@@ -1,5 +1,6 @@
 import { allEvents } from 'contentlayer/generated'
 import EventCard from '@/components/EventCard'
+import { isEventPast } from '@/lib/events'
 import { compareDesc, parseISO } from 'date-fns'
 import { Metadata } from 'next'
 
@@ -8,9 +9,13 @@ export const metadata: Metadata = {
   description: 'Upcoming and past events',
 }
 
+// Re-render hourly so "Past Event" labels flip without a redeploy
+export const revalidate = 3600
+
 export default function EventsPage() {
   // Sort events by date, newest first
   const events = allEvents.sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)))
+  const now = new Date()
 
   return (
     <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -21,7 +26,7 @@ export default function EventsPage() {
       <div className="container py-12">
         <div className="flex flex-col gap-8">
           {events.length > 0 ? (
-            events.map((event) => <EventCard key={event.slug} event={event} />)
+            events.map((event) => <EventCard key={event.slug} event={event} isPast={isEventPast(event, now)} />)
           ) : (
             <div className="py-16 text-center">
               <div className="mx-auto mb-6 h-24 w-24 text-gray-300 dark:text-gray-600">

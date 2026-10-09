@@ -1,14 +1,12 @@
 import { allEvents } from 'contentlayer/generated'
-import { useMDXComponent } from 'pliny/mdx-components'
+import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { format, parseISO } from 'date-fns'
 
-export default function EventPage({ params }) {
-  const event = allEvents.find((e) => e.slug === params.slug)
-
-  // 先生成 MDX 组件，确保 hook 不被“条件调用”
-  const MDXContent = useMDXComponent(event?.body?.code ?? '')
+export default async function EventPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const event = allEvents.find((e) => e.slug === slug)
 
   if (!event) return notFound()
 
@@ -23,7 +21,7 @@ export default function EventPage({ params }) {
         {event.time && <> &middot; {event.time}</>}
         {event.location && <> &middot; {event.location}</>}
       </div>
-      <MDXContent />
+      <MDXLayoutRenderer code={event.body.code} />
     </article>
   )
 }

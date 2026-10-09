@@ -6,7 +6,7 @@ const siteMetadata = {
   description: 'GEOS is the Geomatics Student Association of the TU Delft. We are a student-run organization that provides a platform for geomatics students to connect, learn, and grow.',
   language: 'en-GB',
   theme: 'light', // system, dark or light
-  siteUrl: 'https://www.geostudelft.nl/',
+  siteUrl: 'https://www.geostudelft.nl', // no trailing slash: sitemap, robots and RSS append '/path'
   siteLogo: `${process.env.BASE_PATH || ''}/images/geos_logo_text.png`,
   socialBanner: `${process.env.BASE_PATH || ''}/images/geos_logo_text.png`,
   email: 'geos@tudelft.nl',
@@ -49,11 +49,6 @@ const siteMetadata = {
     // googleAnalytics: {
     //   googleAnalyticsId: '', // e.g. G-XXXXXXX
     // },
-  },
-  newsletter: {
-    // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus, beehive
-    // Please add your .env file and modify it according to your selection
-    provider: 'buttondown',
   },
   comments: {
     // If you want to use an analytics provider you have to add it to the
