@@ -9,14 +9,16 @@ Website for GEOS, the Geomatics student association at TU Delft (geostudelft.nl)
 ## Commands
 
 ```bash
-npm install
+npm install        # also installs the husky pre-commit hook (prepare script)
 npm run dev        # next dev --webpack (contentlayer regenerates on content changes)
 npm run build      # next build --webpack, then scripts/postbuild.mjs (writes RSS feed to public/feed.xml)
-npm run serve      # serve the production build
+npm start          # serve the production build
 npm run lint       # eslint --fix over app/, components/, data/, lib/, scripts/ (rewrites files)
-npx eslint app components data lib scripts   # lint without fixing
+npx eslint .       # lint the whole repo without fixing
 npm run analyze    # build with bundle analyzer
 ```
+
+The pre-commit hook (`.husky/pre-commit`) runs lint-staged: `eslint --fix` on staged JS/TS files, then `prettier --write` on staged JS/TS/JSON/CSS/MD/MDX files. A lint error blocks the commit.
 
 **Keep `--webpack` on `dev`, `build`, and `analyze`.** Next 16 builds with Turbopack by default. `next-contentlayer2` only generates `.contentlayer/` from a webpack compiler hook, so under Turbopack no content is generated and the build fails.
 
@@ -29,28 +31,32 @@ Build-time env flags read in `next.config.js` and `app/layout.tsx`: `EXPORT` (st
 ## Architecture
 
 **Content pipeline.** `contentlayer.config.ts` reads `data/` and generates typed collections into `.contentlayer/generated` (gitignored). Pages import them as `allEvents`, `allCareers`, and `allGalleries` from `contentlayer/generated`. Document types and their globs:
+
 - `Event`: `data/events/*.mdx`. Required: `title`, `date`, `location`. Optional `eventType` is one of `single | multi-day | all-day`.
 - `Career`: `data/careers/**/*.mdx`. All fields are required, including `companyLogo`, `applicationDeadline`, and `applicationLink`.
 - `Gallery`: `data/gallery/**/*.mdx`, grouped by academic-year folders like `2025-26/`. Gallery cards link out to `link`, usually an Instagram post.
-- `Partner` is defined, but `data/partners/` doesn't exist. The partners page reads `data/partnersData.ts`.
+
+Partners aren't MDX content; the partners page reads `data/partnersData.ts`.
 
 Only `.mdx` files match these globs. A `.md` file in a content folder, such as `data/careers/kadaster-internships.md`, is skipped with a build warning.
 
 The computed `slug` is the file path with its first directory removed (`events/kick-off.mdx` → `kick-off`), so the file name sets the URL `/events/<slug>`. Contentlayer stores `date` fields as UTC-midnight ISO strings like `'2025-11-07T00:00:00.000Z'`.
 
-Render MDX bodies with `<MDXLayoutRenderer code={doc.body.code} />` from `pliny/mdx-components`. Dynamic route pages are `async` and must `await params`, since `params` is a Promise in Next 16.
+MDX is compiled with `remark-gfm`, `rehype-slug`, `rehype-autolink-headings` (which adds the hover link icon styled by `.content-header-link` in `css/tailwind.css`), and `rehype-preset-minify`. There is no math, code highlighting, or custom MDX component map, so markdown images render as plain `<img>`. Render MDX bodies with `<MDXLayoutRenderer code={doc.body.code} />` from `pliny/mdx-components`. Dynamic route pages are `async` and must `await params`, since `params` is a Promise in Next 16.
 
 **Structured data in TypeScript.** Content that isn't MDX lives in `data/*.ts`:
-- `boardMembers.ts`: one entry per academic year, newest first. Each entry stores image *file names*, which `components/BoardMembers.tsx` resolves to `/images/board/<name>`. If the group photo is missing, the component falls back to `groupfoto_fallback.jpg`.
+
+- `boardMembers.ts`: one entry per academic year, newest first. Each entry stores image _file names_, which `components/BoardMembers.tsx` resolves to `/images/board/<name>`. If the group photo is missing, the component falls back to `groupfoto_fallback.jpg`.
 - `partnersData.ts`: partner logos and links.
 - `sponsorshipPackages.ts`: sponsorship packages.
 - `headerNavLinks.ts`: navigation links.
-- `siteMetadata.js`: site-wide config (URLs, socials, analytics). It is CommonJS because `scripts/rss.mjs` and `contentlayer.config.ts` also import it. `siteUrl` has no trailing slash because the sitemap, robots.txt, and RSS feed append `/path` to it.
+- `siteMetadata.js`: site-wide config (URLs, socials, Umami analytics). The footer's `components/social-icons` only defines mail, LinkedIn, and Instagram icons; add one there before linking a new network. It is CommonJS because `scripts/rss.mjs` also imports it outside the Next build. `siteUrl` has no trailing slash because the sitemap, robots.txt, and RSS feed append `/path` to it.
 
 **Images.** Images are static files under `public/images/{events,careers,gallery/<year>,board,partners,home}` and are referenced by absolute path, for example `/images/events/foo.jpg`.
 
 **Event status.** `isEventPast` in `lib/events.ts` (imported as `@/lib/events`) is the single source for past/upcoming. Both `/events` (it passes `isPast` into `EventCard`) and the homepage's "Upcoming" badge call it on the server. Both pages set `revalidate = 3600` so labels update hourly without a redeploy. Rules:
-- An event is past once it has *ended*, in Europe/Amsterdam time regardless of the server's time zone.
+
+- An event is past once it has _ended_, in Europe/Amsterdam time regardless of the server's time zone.
 - The last day is `endDate` for `multi-day` events, otherwise `date`.
 - If `time` is a range such as `'1:45 PM – 6:00 PM'` or `'18:00 – 21:00'`, the event ends at the end time on the last day. Ranges can be separated by an en dash, a hyphen, an em dash, or "to". An end at or before the start rolls over to the next day.
 - With no end time (no `time`, or only a start time), the event ends at midnight after the last day.

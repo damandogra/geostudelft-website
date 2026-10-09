@@ -28,8 +28,6 @@ export default function Footer() {
             <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Get in touch</h3>
             <div className="flex space-x-4">
               <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} size={5} />
-              {/* <SocialIcon kind="facebook" href={siteMetadata.facebook} size={5} /> */}
-              {/* <SocialIcon kind="x" href={siteMetadata.x} size={5} /> */}
               <SocialIcon kind="linkedin" href={siteMetadata.linkedin} size={5} />
               <SocialIcon kind="instagram" href={siteMetadata.instagram} size={5} />
             </div>
