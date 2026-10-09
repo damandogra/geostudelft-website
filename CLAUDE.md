@@ -22,11 +22,24 @@ The pre-commit hook (`.husky/pre-commit`) runs lint-staged: `eslint --fix` on st
 
 **Keep `--webpack` on `dev`, `build`, and `analyze`.** Next 16 builds with Turbopack by default. `next-contentlayer2` only generates `.contentlayer/` from a webpack compiler hook, so under Turbopack no content is generated and the build fails.
 
-There is no test suite. To verify a change, run `npm run build`: it fails on content that doesn't match the Contentlayer schema and on type errors. `next build` no longer lints, so run lint separately. Formatting is Prettier: no semicolons, single quotes, `printWidth: 200`, and Tailwind class sorting.
+There is no test suite. The final check is `npm run build`: it fails on content that doesn't match the Contentlayer schema and on type errors. `next build` no longer lints, so run lint separately. See Workflow below for when to run what. Formatting is Prettier: no semicolons, single quotes, `printWidth: 200`, and Tailwind class sorting.
 
 **ESLint.** `eslint.config.mjs` is a flat config built from `eslint-config-next`'s `core-web-vitals` and `typescript` presets, plus jsx-a11y's recommended rules and Prettier. ESLint stays on v9 because plugins bundled by `eslint-config-next` (react, import, jsx-a11y) don't support v10. The React Compiler rules are on, so don't create components during render; for example, don't call `useMDXComponent` inside a component body.
 
 Build-time env flags read in `next.config.js` and `app/layout.tsx`: `EXPORT` (static export to `out/`), `BASE_PATH`, `UNOPTIMIZED` (disables image optimization).
+
+## Workflow
+
+- **While iterating**, check changes with only `npx eslint .` and `npx tsc --noEmit`. Don't run full builds. `tsc` reads the types in `.contentlayer/generated`, which the dev server regenerates when content changes.
+- **Run `npm run build` once, at the end of a task**, and never while the dev server is running. Check first that nothing is listening on port 3000.
+- **Never delete `.next` or `.next/cache`**, including subfolders such as `.next/dev/cache/images`.
+- **Visual checks** use `scripts/screenshot.mjs` against the running dev server. It drives headless Edge or Chrome at exact viewport widths (375px and 1280px by default) and prints the paths of the PNGs it saves, which you can then open with Read. It exits with an error if nothing is responding at `--base`. On a freshly started dev server, images can come out blank or grey because they're still being optimised on first request. Run the command again before treating that as a bug.
+
+  ```bash
+  node scripts/screenshot.mjs / --slide=2                        # homepage with carousel slide 2 showing
+  node scripts/screenshot.mjs /events/kick-off /about --full     # whole pages
+  node scripts/screenshot.mjs /events --selector='h1' --widths=375
+  ```
 
 ## Architecture
 
@@ -34,7 +47,7 @@ Build-time env flags read in `next.config.js` and `app/layout.tsx`: `EXPORT` (st
 
 - `Event`: `data/events/*.mdx`. Required: `title`, `date`, `location`. Optional `eventType` is one of `single | multi-day | all-day`.
 - `Career`: `data/careers/**/*.mdx`. All fields are required, including `companyLogo`, `applicationDeadline`, and `applicationLink`.
-- `Gallery`: `data/gallery/**/*.mdx`, grouped by academic-year folders like `2025-26/`. Gallery cards link out to `link`, usually an Instagram post.
+- `Gallery`: `data/gallery/**/*.mdx`, grouped by academic-year folders like `2025-26/`. Gallery cards link to `link`, usually an Instagram post (new tab) or a page on this site (same tab). `image` is the cover; the optional `images` list adds more photos, shown side by side on desktop and stacked on mobile.
 
 Partners aren't MDX content; the partners page reads `data/partnersData.ts`.
 

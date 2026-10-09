@@ -11,6 +11,26 @@ type Slide = {
   primary?: { href: string; label: string }
   secondary?: { href: string; label: string }
   imagePosition?: 'center' | 'top' | 'bottom'
+  // 'split' shows the whole image (e.g. a poster) next to the text on a solid `background`, instead of behind it
+  layout?: 'cover' | 'split'
+  background?: string
+}
+
+function SlideButtons({ slide, className }: { slide: Slide; className: string }) {
+  return (
+    <div className={`flex gap-4 ${className}`}>
+      {slide.primary && (
+        <Link href={slide.primary.href} className="bg-primary-500 hover:bg-primary-600 rounded-md px-6 py-3 text-white transition-colors">
+          {slide.primary.label}
+        </Link>
+      )}
+      {slide.secondary && (
+        <Link href={slide.secondary.href} className="rounded-md border border-white px-6 py-3 text-white transition-colors hover:bg-white hover:text-gray-900">
+          {slide.secondary.label}
+        </Link>
+      )}
+    </div>
+  )
 }
 
 type Props = {
@@ -88,38 +108,43 @@ export default function BannerCarousel({ slides, className = '', autoPlayMs = 60
       aria-roledescription="carousel"
     >
       {/* Track */}
-      <div className="flex transition-transform duration-700 ease-out" style={{ transform: `translateX(-${index * 100}%)` }}>
-        {slides.map((s, i) => (
-          <div key={i} className="relative min-w-full">
-            <div className="absolute inset-0">
-              <Image src={s.image} alt={s.title} fill priority={i === 0} className={`object-cover ${s.imagePosition ? `object-${s.imagePosition}` : 'object-bottom'}`} />
-              {/* Optional overlay layer */}
-              <div className="absolute inset-0 bg-black/30" />
+      <div className="flex h-full transition-transform duration-700 ease-out" style={{ transform: `translateX(-${index * 100}%)` }}>
+        {slides.map((s, i) =>
+          s.layout === 'split' ? (
+            // Mobile: image on top, text below. Desktop: text left, image right. No overlay, so the image stays readable
+            <div key={i} className="relative flex min-w-full flex-col md:flex-row-reverse" style={{ backgroundColor: s.background }}>
+              <div className="relative h-2/5 w-full shrink-0 sm:h-1/2 md:h-full md:w-1/2">
+                <Image src={s.image} alt={s.title} fill priority={i === 0} sizes="(min-width: 768px) 50vw, 100vw" className="object-contain p-3 md:p-6" />
+              </div>
+              {/* px-12 keeps the text clear of the prev/next arrows, which sit over this block on mobile */}
+              <div className="flex flex-1 flex-col justify-center px-12 pb-8 text-center text-white md:pr-6 md:pb-0 md:pl-16 md:text-left">
+                <h1 className="text-2xl font-bold tracking-tight sm:text-4xl md:text-5xl">{s.title}</h1>
+                {s.subtitle && <p className="mt-2 text-sm sm:text-lg md:mt-4 md:text-xl">{s.subtitle}</p>}
+                {s.description && <p className="mt-1 text-sm text-white/80 sm:text-base md:mt-2">{s.description}</p>}
+                <SlideButtons slide={s} className="mt-4 justify-center md:mt-8 md:justify-start" />
+              </div>
             </div>
+          ) : (
+            <div key={i} className="relative min-w-full">
+              <div className="absolute inset-0">
+                <Image src={s.image} alt={s.title} fill priority={i === 0} className={`object-cover ${s.imagePosition ? `object-${s.imagePosition}` : 'object-bottom'}`} />
+                {/* Optional overlay layer */}
+                <div className="absolute inset-0 bg-black/30" />
+              </div>
 
-            {/* Text layer */}
-            <div className="relative container mx-auto px-4 py-24 text-white">
-              <div className="text-center">
-                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">{s.title}</h1>
-                {s.subtitle && <p className="mx-auto mt-6 max-w-2xl text-xl">{s.subtitle}</p>}
-                {s.description && <p className="mx-auto mt-1 max-w-2xl text-base">{s.description}</p>}
+              {/* Text layer */}
+              <div className="relative container mx-auto px-4 py-24 text-white">
+                <div className="text-center">
+                  <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">{s.title}</h1>
+                  {s.subtitle && <p className="mx-auto mt-6 max-w-2xl text-xl">{s.subtitle}</p>}
+                  {s.description && <p className="mx-auto mt-1 max-w-2xl text-base">{s.description}</p>}
 
-                <div className="mt-10 flex justify-center gap-4">
-                  {s.primary && (
-                    <Link href={s.primary.href} className="bg-primary-500 hover:bg-primary-600 rounded-md px-6 py-3 text-white transition-colors">
-                      {s.primary.label}
-                    </Link>
-                  )}
-                  {s.secondary && (
-                    <Link href={s.secondary.href} className="rounded-md border border-white px-6 py-3 text-white transition-colors hover:bg-white hover:text-gray-900">
-                      {s.secondary.label}
-                    </Link>
-                  )}
+                  <SlideButtons slide={s} className="mt-10 justify-center" />
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        )}
       </div>
 
       {/* Buttom */}

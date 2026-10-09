@@ -122,6 +122,9 @@ Description of the gallery item with markdown support.
 ```
 
 **Required fields:** `title`, `date`, `image`, `link`
+**Optional fields:** `images`, a list of extra photos shown next to the cover `image`, for example `images: ['/images/gallery/2026-27/photo2.webp']`
+
+`link` is usually the Instagram post, which opens in a new tab. It can also be a page on this site, such as `/events/intergeo-2026`.
 
 ## TypeScript Format Content
 

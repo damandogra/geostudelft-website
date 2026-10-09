@@ -43,13 +43,24 @@ export default function HomePage() {
       imagePosition: 'bottom' as const,
     },
     {
-      image: '/images/events/lunch-lecture-ravon_26.webp',
+      image: '/images/events/lunch-lecture-ravon.webp',
       title: 'Lunch Lecture: Adrien Ravon',
       subtitle: 'Wed 14 Oct 2026 · Free for Geomatics students, lunch included',
       description: 'Architect and academic Adrien Ravon shares 15 years of work bridging academia, the public and design action.',
       primary: { href: '/events/lunch-lecture-adrien-ravon', label: 'About' },
       secondary: { href: 'https://forms.gle/QAfmrF5annpqBjJH8', label: 'Sign Up' },
       imagePosition: 'center' as const,
+    },
+    {
+      image: '/images/events/geoday_26.webp',
+      title: 'Geomatics Day 2026',
+      subtitle: 'Friday 6 November · 13:00 – 17:15 · Berlage Rooms, BK',
+      description: 'Synthesis projects, company pitches and the Best Thesis Award 2026, followed by drinks. Registration required!',
+      primary: { href: '/events/geoday_26', label: 'About' },
+      secondary: { href: 'https://geomatics.bk.tudelft.nl/geomaticsday/', label: 'Sign Up' },
+      // Poster with its own text: show it whole beside the slide text, on the navy of the poster's left edge
+      layout: 'split' as const,
+      background: '#13295d',
     },
   ]
 

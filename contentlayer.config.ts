@@ -58,6 +58,8 @@ export const Gallery = defineDocumentType(() => ({
     title: { type: 'string', required: true },
     date: { type: 'date', required: true },
     image: { type: 'string', required: true },
+    // Extra photos shown next to the cover `image`
+    images: { type: 'list', of: { type: 'string' }, required: false },
     link: { type: 'string', required: true },
   },
   computedFields: {
