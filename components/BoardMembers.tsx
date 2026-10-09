@@ -42,7 +42,7 @@ export default function BoardMembers({ boardYear }: BoardMembersProps) {
               <Image src={`/images/board/${boardYear.groupPhotoName}`} alt={`Board members ${boardYear.year}`} width={1200} height={800} className="h-auto w-full" onError={handleGroupPhotoError} />
             ) : !groupPhotoFallbackError ? (
               <Image
-                src="/images/board/groupfoto_fallback.jpg"
+                src="/images/board/groupfoto_fallback.webp"
                 alt={`Board members ${boardYear.year} (fallback)`}
                 width={1200}
                 height={800}

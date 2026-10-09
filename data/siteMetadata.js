@@ -7,8 +7,8 @@ const siteMetadata = {
   language: 'en-GB',
   theme: 'light', // system, dark or light
   siteUrl: 'https://www.geostudelft.nl', // no trailing slash: sitemap, robots and RSS append '/path'
-  siteLogo: `${process.env.BASE_PATH || ''}/images/geos_logo_text.png`,
-  socialBanner: `${process.env.BASE_PATH || ''}/images/geos_logo_text.png`,
+  siteLogo: `${process.env.BASE_PATH || ''}/images/geos_logo_text.webp`,
+  socialBanner: `${process.env.BASE_PATH || ''}/images/geos_logo_text.png`, // PNG, not WebP: LinkedIn link previews don't reliably support WebP
   email: 'geos@tudelft.nl',
   linkedin: 'https://www.linkedin.com/company/geostudelft/',
   instagram: 'https://www.instagram.com/geomaticsdelft/',

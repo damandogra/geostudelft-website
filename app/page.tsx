@@ -30,7 +30,7 @@ export default function HomePage() {
   // Slides for the hero carousel
   const slides = [
     {
-      image: '/images/home/pointcloud.jpg',
+      image: '/images/home/pointcloud.webp',
       title: 'Welcome to GEOS!',
       subtitle: 'The Study Association of Geomatics Master Programme TU Delft',
       description: 'We organize events, provide study materials, and create a community for students interested in geosciences and related fields.',
@@ -39,7 +39,7 @@ export default function HomePage() {
       imagePosition: 'bottom' as const,
     },
     {
-      image: '/images/events/geoday_24.jpeg',
+      image: '/images/events/geoday_24.webp',
       title: 'Geomatics Day',
       subtitle: 'Mark your calendars for the annual Geomatics Day at TU Delft! ',
       description: 'Press "Sign Up" to register',
@@ -48,7 +48,7 @@ export default function HomePage() {
       imagePosition: 'center' as const,
     },
     {
-      image: '/images/gallery/2025-26/intergeo2025.jpg',
+      image: '/images/gallery/2025-26/intergeo2025.webp',
       title: 'INTERGEO @Frankfurt',
       subtitle: 'Check out our trip to INTERGEO!',
       description: 'This year, GEOS took 40 Geomatics students to  Frankfurt for the annual INTERGEO trip 🇩🇪',
@@ -68,7 +68,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <div className="relative h-64 lg:h-120">
-              <Image src="/images/home/events.jpg" alt="Events" fill className="rounded-lg object-cover" />
+              <Image src="/images/home/events.webp" alt="Events" fill className="rounded-lg object-cover" />
             </div>
             <div>
               <h2 className="mb-6 text-3xl font-bold text-gray-900 dark:text-gray-100">Events</h2>
@@ -133,7 +133,7 @@ export default function HomePage() {
               </Link>
             </div>
             <div className="relative h-64 lg:h-80">
-              <Image src="/images/home/career.jpg" alt="Careers" fill className="rounded-lg object-cover" />
+              <Image src="/images/home/career.webp" alt="Careers" fill className="rounded-lg object-cover" />
             </div>
           </div>
         </div>

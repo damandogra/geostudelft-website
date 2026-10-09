@@ -47,7 +47,7 @@ time: '12:30 PM – 1:30 PM'
 eventType: 'single'
 location: 'Hall P'
 excerpt: 'Brief description for RSS feeds and previews'
-image: '/images/events/lunch-lecture.jpg'
+image: '/images/events/lunch-lecture.webp'
 ---
 
 Full event description goes here with markdown formatting.
@@ -76,7 +76,7 @@ Career postings follow a similar structure to events but with job-specific metad
 ---
 title: 'Geotechnical Engineer'
 company: 'Fugro'
-companyLogo: '/images/careers/fugro-logo.png'
+companyLogo: '/images/careers/fugro-logo.webp'
 location: 'Delft, Netherlands'
 description: 'Brief job description'
 applicationDeadline: '2024-04-30'
@@ -110,7 +110,7 @@ Gallery items are organized by academic year and contain event photos and descri
 ---
 title: 'Board Transition'
 date: '2024-07-05'
-image: '/images/gallery/2024-25/board.jpeg'
+image: '/images/gallery/2024-25/board.webp'
 link: 'https://www.instagram.com/p/example/'
 ---
 
@@ -137,10 +137,10 @@ Board member data is organized by academic year with member details and group ph
 {
   year: '2025 - 2026',
   installationDate: 'April 29, 2025',
-  groupPhotoName: 'board_2526.jpg', // Optional group photo
+  groupPhotoName: 'board_2526.webp', // Optional group photo
   members: [
-    { name: 'Carlo Cordes', role: 'Chairperson', imageName: 'Carlo.jpg' },
-    { name: 'Neelabh Singh', role: 'Secretary', imageName: 'Neelabh.jpg' },
+    { name: 'Carlo Cordes', role: 'Chairperson', imageName: 'Carlo.webp' },
+    { name: 'Neelabh Singh', role: 'Secretary', imageName: 'Neelabh.webp' },
     // Add more members...
   ],
 }
@@ -159,7 +159,7 @@ Partner information including logos and descriptions.
 ```typescript
 {
   name: 'TU Delft',
-  logo: '/images/partners/TUD.png',
+  logo: '/images/partners/TUD.webp',
   website: 'https://www.tudelft.nl',
   description: 'Delft University of Technology', // Optional but good to have
 }

@@ -46,13 +46,13 @@ MDX is compiled with `remark-gfm`, `rehype-slug`, `rehype-autolink-headings` (wh
 
 **Structured data in TypeScript.** Content that isn't MDX lives in `data/*.ts`:
 
-- `boardMembers.ts`: one entry per academic year, newest first. Each entry stores image _file names_, which `components/BoardMembers.tsx` resolves to `/images/board/<name>`. If the group photo is missing, the component falls back to `groupfoto_fallback.jpg`.
+- `boardMembers.ts`: one entry per academic year, newest first. Each entry stores image _file names_, which `components/BoardMembers.tsx` resolves to `/images/board/<name>`. If the group photo is missing, the component falls back to `groupfoto_fallback.webp`.
 - `partnersData.ts`: partner logos and links.
 - `sponsorshipPackages.ts`: sponsorship packages.
 - `headerNavLinks.ts`: navigation links.
 - `siteMetadata.js`: site-wide config (URLs, socials, Umami analytics). The footer's `components/social-icons` only defines mail, LinkedIn, and Instagram icons; add one there before linking a new network. It is CommonJS because `scripts/rss.mjs` also imports it outside the Next build. `siteUrl` has no trailing slash because the sitemap, robots.txt, and RSS feed append `/path` to it.
 
-**Images.** Images are static files under `public/images/{events,careers,gallery/<year>,board,partners,home}` and are referenced by absolute path, for example `/images/events/foo.jpg`.
+**Images.** Images are static files under `public/images/{events,careers,gallery/<year>,board,partners,home}` and are referenced by absolute path, for example `/images/events/foo.webp`. Images are WebP. The one exception is `geos_logo_text.png`, kept for `socialBanner` because LinkedIn link previews don't reliably support WebP.
 
 **Event status.** `isEventPast` in `lib/events.ts` (imported as `@/lib/events`) is the single source for past/upcoming. Both `/events` (it passes `isPast` into `EventCard`) and the homepage's "Upcoming" badge call it on the server. Both pages set `revalidate = 3600` so labels update hourly without a redeploy. Rules:
 
