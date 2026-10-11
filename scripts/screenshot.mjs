@@ -154,13 +154,13 @@ for (const path of paths) {
 
       // Last step before capturing: carousel autoplay moves on every 6s
       if (slide) {
-        // Clicks before hydration are ignored, so click until the slide's dot turns active (solid bg-white, not bg-white/50)
-        const dot = `document.querySelector('[aria-label="Go to slide ${slide}"]')`
+        // Clicks before hydration are ignored, so click until the slide's dot is marked current
+        const dot = `document.querySelector('[aria-label^="Go to slide ${slide}:"]')`
         let active = false
         for (let i = 0; i < 20 && !active; i++) {
           await evaluate(`${dot}.click()`)
           await sleep(300)
-          active = await evaluate(`${dot}.classList.contains('bg-white')`)
+          active = await evaluate(`${dot}.getAttribute('aria-current') === 'true'`)
         }
         if (!active) throw new Error(`carousel did not move to slide ${slide}`)
         await sleep(1000) // slide transition is 700ms

@@ -34,13 +34,15 @@ export default function HomePage() {
   // Slides for the hero carousel
   const slides = [
     {
-      image: '/images/home/pointcloud.webp',
+      image: '/images/home/hero-pointcloud-accent.webp',
       title: 'Welcome to GEOS!',
       subtitle: 'The Study Association of Geomatics Master Programme TU Delft',
       description: 'We organize events, provide study materials, and create a community for students interested in geomatics and geosciences.',
       primary: { href: '/about', label: 'About Us' },
       secondary: { href: '/gallery', label: 'View Gallery' },
-      imagePosition: 'bottom' as const,
+      imagePosition: 'center' as const,
+      overlay: 'subtle' as const,
+      drift: true,
     },
     {
       image: '/images/events/lunch-lecture-ravon.webp',
@@ -66,6 +68,9 @@ export default function HomePage() {
 
   return (
     <>
+      {/* The carousel's slide titles are h2s, so the page's one h1 is here for screen readers and search engines */}
+      <h1 className="sr-only">GEOS, the Geomatics Student Association of TU Delft</h1>
+
       {/* Hero Banner Section => Carousel */}
       <BannerCarousel slides={slides} className="h-[420px] sm:h-[520px] md:h-[430px]" />
 
@@ -74,26 +79,31 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <div className="relative h-64 lg:h-120">
-              <Image src="/images/home/events.webp" alt="Events" fill className="rounded-lg object-cover" />
+              {/* Square photo; below lg the box is a wide strip, so anchor at 66% down to keep the faces in view */}
+              <Image
+                src="/images/home/events-2026.webp"
+                alt="GEOS members holding the GEOS banner at the entrance of INTERGEO in Munich"
+                fill
+                sizes="(min-width: 1024px) 480px, 100vw"
+                className="rounded-lg object-cover object-[50%_66%]"
+              />
             </div>
             <div>
-              <h2 className="mb-6 text-3xl font-bold text-gray-900 dark:text-gray-100">Events</h2>
-              <p className="mb-6 text-gray-600 dark:text-gray-400">
+              <h2 className="mb-6 text-3xl font-bold text-gray-900">Events</h2>
+              <p className="mb-6 text-gray-600">
                 Take a look at past and future events organised by and for the Geomatics students. From lunch lectures to networking events, we provide opportunities for learning and connection.
               </p>
               {eventsWithStatus.length > 0 && (
                 <div className="mb-6 space-y-3">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Events:</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">Recent Events:</h3>
                   {eventsWithStatus.map((event) => (
                     <div key={event.slug} className="border-primary-500 border-l-4 pl-4">
-                      <Link href={`/events/${event.slug}`} className="hover:text-primary-600 block">
+                      <Link href={`/events/${event.slug}`} className="group block">
                         <div className="flex items-start justify-between">
-                          <h4 className="font-medium text-gray-900 dark:text-gray-100">{event.title}</h4>
-                          {event.isFuture && (
-                            <span className="ml-2 inline-flex items-center rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-200">Upcoming</span>
-                          )}
+                          <h4 className="group-hover:text-primary-700 font-medium text-gray-900">{event.title}</h4>
+                          {event.isFuture && <span className="ml-2 inline-flex items-center rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">Upcoming</span>}
                         </div>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <p className="text-sm text-gray-500">
                           {format(parseISO(event.date), 'MMM dd, yyyy')} {event.time && `• ${event.time}`} • {event.location}
                         </p>
                       </Link>
@@ -101,7 +111,7 @@ export default function HomePage() {
                   ))}
                 </div>
               )}
-              <Link href="/events" className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 inline-flex items-center">
+              <Link href="/events" className="text-primary-700 hover:text-primary-800 inline-flex items-center font-medium">
                 View all events →
               </Link>
             </div>
@@ -110,24 +120,24 @@ export default function HomePage() {
       </div>
 
       {/* Careers Section */}
-      <div className="rounded-lg bg-gray-50 py-16 dark:bg-gray-900">
+      <div className="rounded-lg bg-gray-50 py-16">
         <div className="container mx-auto px-4">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <div>
-              <h2 className="mb-6 text-3xl font-bold text-gray-900 dark:text-gray-100">Careers</h2>
-              <p className="mb-6 text-gray-600 dark:text-gray-400">
+              <h2 className="mb-6 text-3xl font-bold text-gray-900">Careers</h2>
+              <p className="mb-6 text-gray-600">
                 Find Geomatics related internships and graduate job offers. GEOS provides a platform for companies and research institutes to post their opportunities and connect with talented
                 students.
               </p>
-              {latestCareers.length === 0 && <p className="mb-6 font-medium text-gray-900 dark:text-gray-100">No open vacancies right now. Check back soon!</p>}
+              {latestCareers.length === 0 && <p className="mb-6 font-medium text-gray-900">No open vacancies right now. Check back soon!</p>}
               {latestCareers.length > 0 && (
                 <div className="mb-6 space-y-3">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Opportunities:</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">Recent Opportunities:</h3>
                   {latestCareers.map((career) => (
                     <div key={career.slug} className="border-primary-500 border-l-4 pl-4">
-                      <Link href={`/careers/${career.slug}`} className="hover:text-primary-600 block">
-                        <h4 className="font-medium text-gray-900 dark:text-gray-100">{career.title}</h4>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <Link href={`/careers/${career.slug}`} className="group block">
+                        <h4 className="group-hover:text-primary-700 font-medium text-gray-900">{career.title}</h4>
+                        <p className="text-sm text-gray-500">
                           {career.company} • {career.location}
                         </p>
                       </Link>
@@ -135,7 +145,7 @@ export default function HomePage() {
                   ))}
                 </div>
               )}
-              <Link href="/careers" className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 inline-flex items-center">
+              <Link href="/careers" className="text-primary-700 hover:text-primary-800 inline-flex items-center font-medium">
                 View all opportunities →
               </Link>
             </div>
@@ -150,24 +160,18 @@ export default function HomePage() {
       <div className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h2 className="mb-6 text-3xl font-bold text-gray-900 dark:text-gray-100">Our Partners</h2>
-            <p className="mx-auto mb-12 max-w-2xl text-gray-600 dark:text-gray-400">Connect with our valued partners who support the Geomatics community and provide opportunities for our students.</p>
+            <h2 className="mb-6 text-3xl font-bold text-gray-900">Our Partners</h2>
+            <p className="mx-auto mb-12 max-w-2xl text-gray-600">Connect with our valued partners who support the Geomatics community and provide opportunities for our students.</p>
           </div>
           <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
             {partnersData.slice(0, 5).map((partner) => (
-              <Link
-                key={partner.name}
-                href={partner.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-center rounded-lg border border-gray-200 bg-white p-6 transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
-              >
+              <Link key={partner.name} href={partner.website} target="_blank" rel="noopener noreferrer" className="group card flex items-center justify-center p-6 transition-shadow hover:shadow-md">
                 <Image src={partner.logo} alt={partner.name} width={120} height={60} className="h-12 w-auto object-contain transition-transform group-hover:scale-105" />
               </Link>
             ))}
           </div>
           <div className="mt-8 text-center">
-            <Link href="/partners" className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 inline-flex items-center">
+            <Link href="/partners" className="text-primary-700 hover:text-primary-800 inline-flex items-center font-medium">
               Meet all our partners →
             </Link>
           </div>

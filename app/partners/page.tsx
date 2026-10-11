@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import PartnerCard from '@/components/PartnerCard'
 import partnersData from '@/data/partnersData'
 import { sponsorshipPackages } from '@/data/sponsorshipPackages'
+import PageHeader from '@/components/PageHeader'
 
 export const metadata: Metadata = {
   title: 'Partners',
@@ -10,11 +11,8 @@ export const metadata: Metadata = {
 
 export default function PartnersPage() {
   return (
-    <div className="divide-y divide-gray-200 dark:divide-gray-700">
-      <div className="space-y-2 pt-6 pb-8 md:space-y-5">
-        <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">Partners</h1>
-        <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">Meet our valued partners and collaborators in geomatics and geosciences.</p>
-      </div>
+    <div className="divide-y divide-gray-200">
+      <PageHeader title="Partners" description="Meet our valued partners and collaborators in geomatics and geosciences." />
 
       <div className="container py-12">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -23,7 +21,7 @@ export default function PartnersPage() {
           ))}
         </div>
 
-        <div className="prose dark:prose-invert mt-12 max-w-none">
+        <div className="prose mt-12 max-w-none">
           <h2>Become a Partner</h2>
           <p>Interested in partnering with us? We're always looking for new collaborations that align with our mission and values.</p>
 
@@ -148,16 +146,16 @@ export default function PartnersPage() {
             </table>
           </div>
         </div>
-        <div className="mt-4 space-x-4">
+        <div className="mt-6 flex flex-wrap gap-4">
           <a
             href="https://www.figma.com/deck/8B3lAoguLeBv7Z97mQDBEM/GEOS_sponsor_deck?node-id=1-23&viewport=-72%2C-34%2C0.49&t=3c1Mppq02FWYQ07F-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-primary-500 hover:bg-primary-600 inline-block rounded-md px-4 py-2 text-white no-underline transition-colors duration-200"
+            className="btn-primary"
           >
             Learn More
           </a>
-          <a href="mailto:geos@tudelft.nl" className="bg-primary-500 hover:bg-primary-600 inline-block rounded-md px-4 py-2 text-white no-underline transition-colors duration-200">
+          <a href="mailto:geos@tudelft.nl" className="btn-primary">
             Contact Us
           </a>
         </div>

@@ -24,7 +24,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
   const prettyDate = event.date ? format(parseISO(event.date), 'MMM dd, yyyy') : ''
 
   return (
-    <article className="prose dark:prose-invert mx-auto max-w-3xl py-12">
+    <article className="prose mx-auto max-w-3xl py-12">
       <h1>{event.title}</h1>
       {event.image && <Image src={event.image} alt={event.title} width={800} height={400} className="mb-6 rounded" />}
       <div className="mb-4 text-gray-500">

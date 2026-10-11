@@ -25,36 +25,36 @@ export default function EventCard({ event, isPast }: EventCardProps) {
   const [imageError, setImageError] = useState(false)
 
   return (
-    <div className="relative flex flex-col rounded-lg border border-gray-200 p-6 md:flex-row dark:border-gray-700">
+    <article className="card flex flex-col p-6 md:flex-row">
       {event.image && !imageError && (
         <div className="relative mb-4 h-48 w-full flex-shrink-0 md:mr-6 md:mb-0 md:w-64">
-          <Image src={event.image} alt={event.title} fill style={{ objectFit: 'cover' }} className="rounded" onError={() => setImageError(true)} />
+          <Image src={event.image} alt="" fill sizes="(min-width: 768px) 256px, 100vw" className="rounded object-cover" onError={() => setImageError(true)} />
         </div>
       )}
       <div className="flex flex-1 flex-col justify-between">
         <div>
-          <div className="mb-2 flex items-center">
-            <span className="text-lg font-bold">{event.title}</span>
-            {isPast && <span className="ml-2 rounded bg-gray-300 px-2 py-1 text-xs text-gray-700">Past Event</span>}
+          <div className="mb-2 flex flex-wrap items-center gap-2">
+            <h2 className="text-lg font-bold text-gray-900">{event.title}</h2>
+            {isPast && <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700">Past event</span>}
           </div>
-          <div className="mb-2 text-sm text-gray-500">
+          <p className="mb-2 text-sm text-gray-500">
             {event.eventType === 'multi-day' && event.endDate
               ? `${format(parseISO(event.date), 'MMM dd')} - ${format(parseISO(event.endDate), 'MMM dd, yyyy')}`
               : format(parseISO(event.date), 'MMM dd, yyyy')}
             {event.time && ` • ${event.time}`}
             {event.eventType === 'all-day' && ' • All Day'}
             {` • ${event.location}`}
-          </div>
+          </p>
           {event.excerpt && <p className="mb-4 text-gray-700">{event.excerpt}</p>}
         </div>
         <div>
-          <Link href={`/events/${event.slug}`}>
-            <button className={`cursor-pointer rounded px-4 py-2 text-white ${isPast ? 'bg-gray-500 hover:bg-gray-600' : 'bg-primary-500 hover:bg-primary-600'}`}>
-              {isPast ? 'Event Ended' : 'View Event →'}
-            </button>
+          {/* One link styled as a button (no <button> inside a link). The hidden title gives each link a unique name */}
+          <Link href={`/events/${event.slug}`} className={isPast ? 'btn-muted' : 'btn-primary'}>
+            View event<span className="sr-only">: {event.title}</span>
+            <span aria-hidden="true">→</span>
           </Link>
         </div>
       </div>
-    </div>
+    </article>
   )
 }

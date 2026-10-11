@@ -5,7 +5,7 @@ const siteMetadata = {
   headerTitle: 'GEOS',
   description: 'GEOS is the Geomatics Student Association of the TU Delft. We are a student-run organization that provides a platform for geomatics students to connect, learn, and grow.',
   language: 'en-GB',
-  theme: 'light', // system, dark or light
+  theme: 'light', // required by pliny's config type; the site is light-only (no dark mode)
   siteUrl: 'https://www.geostudelft.nl', // no trailing slash: sitemap, robots and RSS append '/path'
   siteLogo: `${process.env.BASE_PATH || ''}/images/geos_logo_text.webp`,
   socialBanner: `${process.env.BASE_PATH || ''}/images/geos_logo_text.png`, // PNG, not WebP: LinkedIn link previews don't reliably support WebP

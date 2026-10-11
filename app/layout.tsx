@@ -6,7 +6,6 @@ import Header from '@/components/Header'
 import SectionContainer from '@/components/SectionContainer'
 import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
-import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
 
 const space_grotesk = Space_Grotesk({
@@ -59,25 +58,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const basePath = process.env.BASE_PATH || ''
 
   return (
-    <html lang={siteMetadata.language} className={`${space_grotesk.variable} scroll-smooth`} suppressHydrationWarning>
+    <html lang={siteMetadata.language} className={`${space_grotesk.variable} scroll-smooth`}>
       <link rel="apple-touch-icon" sizes="76x76" href={`${basePath}/favicons/apple-touch-icon.png`} />
       <link rel="icon" type="image/png" sizes="32x32" href={`${basePath}/favicons/favicon-32x32.png`} />
       <link rel="icon" type="image/png" sizes="16x16" href={`${basePath}/favicons/favicon-16x16.png`} />
       <link rel="manifest" href={`${basePath}/favicons/site.webmanifest`} />
       <link rel="mask-icon" href={`${basePath}/favicons/safari-pinned-tab.svg`} color="#5bbad5" />
       <meta name="msapplication-TileColor" content="#000000" />
-      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
-      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
+      <meta name="theme-color" content="#fff" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
-      <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
-        <ThemeProviders>
-          <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
-          <SectionContainer>
-            <Header />
-            <main className="mb-auto">{children}</main>
-            <Footer />
-          </SectionContainer>
-        </ThemeProviders>
+      <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased">
+        <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
+        <SectionContainer>
+          <Header />
+          <main className="mb-auto">{children}</main>
+          <Footer />
+        </SectionContainer>
       </body>
     </html>
   )
