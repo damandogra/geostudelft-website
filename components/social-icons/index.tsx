@@ -1,24 +1,28 @@
-import { Mail, Github, Facebook, Youtube, Linkedin, Twitter, X, Mastodon, Threads, Instagram, Medium, Bluesky } from './icons'
+import { Mail, Linkedin, Instagram } from './icons'
 
 const components = {
   mail: Mail,
-  github: Github,
-  facebook: Facebook,
-  youtube: Youtube,
   linkedin: Linkedin,
-  twitter: Twitter,
-  x: X,
-  mastodon: Mastodon,
-  threads: Threads,
   instagram: Instagram,
-  medium: Medium,
-  bluesky: Bluesky,
+}
+
+const labels: Record<keyof typeof components, string> = {
+  mail: 'Email',
+  linkedin: 'LinkedIn',
+  instagram: 'Instagram',
+}
+
+// Full class names, so Tailwind can find them when it scans this file
+const sizes = {
+  5: 'h-5 w-5',
+  6: 'h-6 w-6',
+  8: 'h-8 w-8',
 }
 
 type SocialIconProps = {
   kind: keyof typeof components
   href: string | undefined
-  size?: number
+  size?: keyof typeof sizes
 }
 
 const SocialIcon = ({ kind, href, size = 8 }: SocialIconProps) => {
@@ -27,9 +31,9 @@ const SocialIcon = ({ kind, href, size = 8 }: SocialIconProps) => {
   const SocialSvg = components[kind]
 
   return (
-    <a className="text-sm text-gray-500 transition hover:text-gray-600" target="_blank" rel="noopener noreferrer" href={href}>
-      <span className="sr-only">{kind}</span>
-      <SocialSvg className={`hover:text-primary-500 dark:hover:text-primary-400 fill-current text-gray-700 dark:text-gray-200 h-${size} w-${size}`} />
+    <a className="group text-sm text-gray-700 transition" target="_blank" rel="noopener noreferrer" href={href}>
+      <span className="sr-only">{labels[kind]}</span>
+      <SocialSvg aria-hidden="true" className={`group-hover:text-primary-700 fill-current ${sizes[size]}`} />
     </a>
   )
 }
